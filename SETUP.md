@@ -1,0 +1,66 @@
+# Hoose Task Tracker
+
+A Next.js app running in Docker. 
+Tap an NFC tag → confirmation page → logs a completed task to Google Tasks.
+
+---
+
+## Setup credentials
+
+### 1.1 Create a Google Cloud project
+
+1. Go to [console.cloud.google.com](https://console.cloud.google.com)
+
+### 1.2 Enable the Tasks API
+
+1. **APIs & Services → Library**
+2. Search **Google Tasks API** → **Enable**
+
+### 1.3 Create OAuth2 credentials
+
+1. **APIs & Services → Credentials → + Create Credentials → OAuth client ID**
+2. Configure consent screen if prompted:
+   - User type: **External**
+   - App name: `NFC Task Tracker`
+   - Add your Google account as a test user
+   - Scope: `https://www.googleapis.com/auth/tasks`
+3. Application type: **Web application**
+4. Authorized redirect URIs: add `https://developers.google.com/oauthplayground`
+5. **Create** → copy **Client ID** and **Client Secret**
+
+### 1.4 Get a refresh token
+
+1. Go to [developers.google.com/oauthplayground](https://developers.google.com/oauthplayground)
+2. Click ⚙️ top right → check **Use your own OAuth credentials** → paste Client ID and Secret
+3. Left panel → **Tasks API v1** → select `https://www.googleapis.com/auth/tasks`
+4. **Authorize APIs** → sign in → Allow
+5. **Exchange authorization code for tokens** → copy the **Refresh token**
+
+---
+
+## Adding new tasks
+
+Edit `src/app/tasks.ts`:
+
+```ts
+{ id: "my-new-task", name: "My new task", icon: "🪴" },
+```
+
+Rebuild:
+
+```bash
+docker compose up -d --build
+```
+
+Program a new tag with `?task=my-new-task`.
+
+---
+
+## Useful commands
+
+```bash
+docker compose logs -f        # live logs
+docker compose restart        # restart
+docker compose down           # stop
+docker compose up -d --build  # rebuild after changes
+```
