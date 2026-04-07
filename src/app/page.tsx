@@ -1,60 +1,54 @@
 import Link from "next/link"
-import { TASKS } from "./tasks"
+import { TASKS, getTask } from "./tasks"
 import { getRecentLogs } from "./lib/googleTasks"
 
 export default async function Home() {
   let recentLogs: Awaited<ReturnType<typeof getRecentLogs>> = []
   try {
-    recentLogs = await getRecentLogs(10)
+    recentLogs = await getRecentLogs()
   } catch {
     // silently skip if Google Tasks is unavailable
   }
 
   return (
-    <main style={{ maxWidth: 480, margin: "0 auto", padding: "2rem 1.25rem" }}>
-      <h1 style={{ fontSize: 22, fontWeight: 600, marginBottom: 8 }}>Task Tracker</h1>
-      <p style={{ fontSize: 15, color: "#666", marginBottom: 32 }}>
+    <main className="max-w-md mx-auto px-5 py-8">
+      <h1 className="text-[22px] font-semibold mb-2">Task Tracker</h1>
+      <p className="text-[15px] text-[#666] mb-8">
         Tap an NFC tag or choose a task below to log a completion.
       </p>
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <div className="flex flex-row flex-wrap gap-2 justify-center">
         {TASKS.map(task => (
           <Link
             key={task.id}
             href={`/log?task=${task.id}`}
-            style={{
-              display: "flex", alignItems: "center", gap: 16,
-              background: "#fff", borderRadius: 16, padding: "18px 20px",
-              border: "1px solid #e5e5e5", textDecoration: "none", color: "inherit",
-            }}
+            className="flex flex-col items-center gap-1.5 px-2.5 py-2.5 rounded-full no-underline text-white"
+            style={{ background: task.color }}
           >
-            <span style={{ fontSize: 28 }}>{task.icon}</span>
-            <span style={{ fontSize: 16, fontWeight: 500 }}>{task.name}</span>
+            <span className="text-xs font-medium">{task.icon} {task.name}</span>
           </Link>
         ))}
       </div>
       {recentLogs.length > 0 && (
-        <div style={{ marginTop: 40 }}>
-          <h2 style={{ fontSize: 15, fontWeight: 600, color: "#444", marginBottom: 12 }}>
+        <div className="mt-10">
+          <h2 className="text-[15px] font-semibold text-[#444] mb-3">
             Recently completed
           </h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <div className="flex flex-col gap-2">
             {recentLogs.map((log, i) => {
               const date = new Date(log.completedAt)
               const label = date.toLocaleString(undefined, {
                 month: "short", day: "numeric", year: "2-digit",
                 hour: "numeric", minute: "2-digit",
               })
+              const task = log.taskId ? getTask(log.taskId) : undefined
               return (
                 <div
                   key={i}
-                  style={{
-                    display: "flex", justifyContent: "space-between", alignItems: "center",
-                    background: "#f9f9f9", borderRadius: 12, padding: "12px 16px",
-                    border: "1px solid #ececec",
-                  }}
+                  className="flex justify-between items-center rounded-xl px-4 py-3 border border-[#ececec]"
+                  style={{ background: task ? task.color : "#f9f9f9" }}
                 >
-                  <span style={{ fontSize: 14, color: "#222" }}>{log.title}</span>
-                  <span style={{ fontSize: 12, color: "#999", whiteSpace: "nowrap", marginLeft: 12 }}>
+                  <span className="text-sm text-[#222]">{log.title}</span>
+                  <span className="text-xs text-[#999] whitespace-nowrap ml-3">
                     {label}
                   </span>
                 </div>

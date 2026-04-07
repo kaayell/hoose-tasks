@@ -5,17 +5,6 @@ import { Task } from "../tasks"
 
 type State = "idle" | "loading" | "success" | "error"
 
-const card: React.CSSProperties = {
-  background: "#fff", borderRadius: 24, padding: "2.5rem 2rem",
-  maxWidth: 400, width: "100%", textAlign: "center", border: "1px solid #e5e5e5",
-}
-
-const btn: React.CSSProperties = {
-  width: "100%", padding: 18, fontSize: 17, fontWeight: 600,
-  background: "#1a1a1a", color: "#fff", border: "none",
-  borderRadius: 14, cursor: "pointer",
-}
-
 export default function ConfirmClient({ task, today }: { task: Task; today: string }) {
   const [state, setState] = useState<State>("idle")
   const [errorMsg, setErrorMsg] = useState("")
@@ -40,40 +29,45 @@ export default function ConfirmClient({ task, today }: { task: Task; today: stri
   }
 
   return (
-    <main style={{ minHeight: "100dvh", display: "flex", alignItems: "center", justifyContent: "center", padding: "1.5rem" }}>
-      <div style={card}>
+    <main className="min-h-dvh flex items-center justify-center p-6"
+          style={{ background: task ? task.color : "#f9f9f9" }}>
+      <div className="bg-white rounded-3xl px-8 py-10 max-w-100 w-full text-center border border-[#e5e5e5]">
         {state === "success" && (
           <>
-            <div style={{ fontSize: 56, marginBottom: 16 }}>✅</div>
-            <h1 style={{ fontSize: 22, fontWeight: 600, marginBottom: 8, color: "#2d7d46" }}>Logged!</h1>
-            <p style={{ fontSize: 15, color: "#888" }}>
+            <div className="text-[56px] mb-4">✅</div>
+            <h1 className="text-[22px] font-semibold mb-2 text-[#2d7d46]">Logged!</h1>
+            <p className="text-[15px] text-[#888]">
               <strong>{task.name}</strong> added to your tasks for {today}.
             </p>
-            <a href="/" style={{ ...btn, display: "block", marginTop: 32, textDecoration: "none", lineHeight: "normal", paddingTop: 18, paddingBottom: 18 }}>Done</a>
+            <a href="/" className="block mt-8 py-[18px] text-[17px] font-semibold bg-[#1a1a1a] text-white border-none rounded-[14px] no-underline leading-normal">
+              Done
+            </a>
           </>
         )}
 
         {state === "error" && (
           <>
-            <div style={{ fontSize: 56, marginBottom: 16 }}>⚠️</div>
-            <h1 style={{ fontSize: 22, fontWeight: 600, marginBottom: 8, color: "#b91c1c" }}>Something went wrong</h1>
-            <p style={{ fontSize: 14, color: "#888", marginBottom: 24 }}>{errorMsg}</p>
-            <button onClick={() => setState("idle")} style={btn}>Try again</button>
+            <div className="text-[56px] mb-4">⚠️</div>
+            <h1 className="text-[22px] font-semibold mb-2 text-[#b91c1c]">Something went wrong</h1>
+            <p className="text-sm text-[#888] mb-6">{errorMsg}</p>
+            <button onClick={() => setState("idle")}
+              className="w-full py-[18px] text-[17px] font-semibold bg-[#1a1a1a] text-white border-none rounded-[14px] cursor-pointer">
+              Try again
+            </button>
           </>
         )}
 
         {(state === "idle" || state === "loading") && (
           <>
-            <div style={{ fontSize: 56, marginBottom: 16 }}>{task.icon}</div>
-            <p style={{ fontSize: 13, color: "#999", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
-              Log completion
-            </p>
-            <h1 style={{ fontSize: 22, fontWeight: 600, marginBottom: 8 }}>{task.name}</h1>
-            <p style={{ fontSize: 14, color: "#888", marginBottom: 32 }}>{today}</p>
-            <button onClick={handleConfirm} disabled={state === "loading"} style={{ ...btn, opacity: state === "loading" ? 0.5 : 1 }}>
+            <div className="text-[56px] mb-4">{task.icon}</div>
+            <p className="text-[13px] text-[#999] uppercase tracking-wide mb-1">Log completion</p>
+            <h1 className="text-[22px] font-semibold mb-2">{task.name}</h1>
+            <p className="text-sm text-[#888] mb-8">{today}</p>
+            <button onClick={handleConfirm} disabled={state === "loading"}
+              className="w-full py-[18px] text-[17px] font-semibold bg-[#1a1a1a] text-white border-none rounded-[14px] cursor-pointer disabled:opacity-50">
               {state === "loading" ? "Logging…" : "Confirm ✓"}
             </button>
-            <a href="/" style={{ display: "block", marginTop: 16, fontSize: 14, color: "#aaa", textDecoration: "none" }}>Cancel</a>
+            <a href="/" className="block mt-4 text-sm text-[#aaa] no-underline">Cancel</a>
           </>
         )}
       </div>

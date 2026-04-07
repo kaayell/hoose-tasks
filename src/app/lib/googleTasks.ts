@@ -12,7 +12,10 @@ function getTasksClient() {
 export interface CompletedLog {
   title: string
   completedAt: string // ISO string
+  taskId?: string
 }
+
+const TASK_ID_RE = /\(id:\s*([^)]+)\)/
 
 export async function getRecentLogs(limit = 10): Promise<CompletedLog[]> {
   const tasks = getTasksClient()
@@ -30,7 +33,11 @@ export async function getRecentLogs(limit = 10): Promise<CompletedLog[]> {
     .filter(t => t.status === "completed" && t.completed)
     .sort((a, b) => new Date(b.completed!).getTime() - new Date(a.completed!).getTime())
     .slice(0, limit)
-    .map(t => ({ title: t.title ?? "", completedAt: t.completed! }))
+    .map(t => ({
+      title: t.title ?? "",
+      completedAt: t.completed!,
+      taskId: TASK_ID_RE.exec(t.notes ?? "")?.[1],
+    }))
 }
 
 export async function logTask(taskId: string, taskName: string) {
