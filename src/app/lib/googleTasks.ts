@@ -16,10 +16,14 @@ export interface CompletedLog {
 
 export async function getRecentLogs(limit = 10): Promise<CompletedLog[]> {
   const tasks = getTasksClient()
+  const lastYear = new Date()
+  lastYear.setFullYear(lastYear.getFullYear() - 1)
+
   const res = await tasks.tasks.list({
     tasklist: "@default",
     showCompleted: true,
     showHidden: true,
+    completedMin: lastYear.toISOString(),
   })
   const items = res.data.items ?? []
   return items
