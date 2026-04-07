@@ -1,6 +1,5 @@
 # Hoose Task Tracker
 
-A Next.js app running in Docker. 
 Tap an NFC tag → confirmation page → logs a completed task to Google Tasks.
 
 ---
@@ -47,20 +46,6 @@ Edit `src/app/tasks.ts`:
 ```
 
 Rebuild:
-
 ```bash
-docker compose up -d --build
-```
-
-Program a new tag with `?task=my-new-task`.
-
----
-
-## Useful commands
-
-```bash
-docker compose logs -f        # live logs
-docker compose restart        # restart
-docker compose down           # stop
-docker compose up -d --build  # rebuild after changes
+npm run build
 ```
