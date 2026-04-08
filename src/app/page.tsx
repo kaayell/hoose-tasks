@@ -26,12 +26,12 @@ export default async function Home() {
   const month = now.getMonth()
   const firstDay = new Date(year, month, 1)
   const daysInMonth = new Date(year, month + 1, 0).getDate()
-  const startDow = firstDay.getDay()
+  const startDay = firstDay.getDay()
   const monthLabel = firstDay.toLocaleString(undefined, { month: "long", year: "numeric" })
-  const todayStr = now.toLocaleDateString("en-CA")
+  const todayStr = now.toISOString().split("T")[0]
 
   const cells: (number | null)[] = [
-    ...Array(startDow).fill(null),
+    ...Array(startDay).fill(null),
     ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
   ]
   while (cells.length % 7 !== 0) cells.push(null)
@@ -75,7 +75,7 @@ export default async function Home() {
             return (
               <div
                 key={i}
-                className={`rounded-lg p-1 min-h-12 flex flex-col items-center gap-0.5 ${isToday ? "bg-[#f0f0f0] ring-1 ring-[#ccc]" : ""}`}
+                className={`rounded-lg p-1 min-h-12 flex flex-col items-center gap-0.5 ${isToday ? "border border-gray-300" : ""}`}
               >
                 <span className={`text-[11px] font-medium ${isToday ? "text-[#333]" : "text-[#999]"}`}>{day}</span>
                 <div className="flex flex-wrap justify-center gap-0.5">
