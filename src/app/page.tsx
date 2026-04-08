@@ -6,10 +6,12 @@ export const dynamic = "force-dynamic"
 
 export default async function Home() {
   let recentLogs: Awaited<ReturnType<typeof getRecentLogs>> = []
+  let logsError: string | null = null
   try {
     recentLogs = await getRecentLogs(200)
-  } catch {
-    // silently skip if Google Tasks is unavailable
+  } catch (err) {
+    logsError = err instanceof Error ? err.message : String(err)
+    console.error("Failed to fetch recent logs from Google Tasks:", logsError)
   }
 
   // Group logs by local date string YYYY-MM-DD
