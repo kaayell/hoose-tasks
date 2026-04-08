@@ -48,10 +48,10 @@ export default async function Home() {
           <Link
             key={task.id}
             href={`/log?task=${task.id}`}
-            className="flex flex-col items-center gap-1.5 px-2.5 py-2.5 rounded-full no-underline text-white"
+            className="flex flex-col items-center gap-1.5 px-4 py-4 rounded-full no-underline text-white"
             style={{ background: task.color }}
           >
-            <span className="text-xs font-medium">{task.icon} {task.name}</span>
+            <span className="text-sm font-medium">{task.icon} {task.name}</span>
           </Link>
         ))}
       </div>
