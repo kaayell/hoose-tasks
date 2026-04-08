@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+if [ -f app.pid ] && kill -0 "$(cat app.pid)" 2>/dev/null; then
+  echo "Already running (pid $(cat app.pid))"
+  exit 1
+fi
+
+nohup npm run start > app.log 2>&1 &
+echo $! > app.pid
+echo "Started (pid $!)"

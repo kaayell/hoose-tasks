@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if [ ! -f app.pid ]; then
+  echo "No app.pid found"
+  exit 1
+fi
+
+PID=$(cat app.pid)
+if kill -0 "$PID" 2>/dev/null; then
+  kill "$PID"
+  rm app.pid
+  echo "Stopped (pid $PID)"
+else
+  echo "Process $PID not running, cleaning up"
+  rm app.pid
+fi
