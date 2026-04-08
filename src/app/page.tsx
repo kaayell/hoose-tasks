@@ -14,7 +14,8 @@ export default async function Home() {
 
   // Group logs by local date string YYYY-MM-DD
   const logsByDate = recentLogs.reduce<Record<string, typeof recentLogs>>((acc, log) => {
-    const date = new Date(log.completedAt).toLocaleDateString("en-CA") // YYYY-MM-DD
+    const d = new Date(log.completedAt)
+    const date = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
     ;(acc[date] ??= []).push(log)
     return acc
   }, {})
