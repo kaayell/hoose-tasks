@@ -49,3 +49,19 @@ Rebuild:
 ```bash
 npm run build
 ```
+
+## Running on server
+```aiignore
+NODE_OPTIONS=--max-old-space-size=4096 npm run build
+nohup npm run start > app.log 2>&1 & #run in background
+```
+
+## Tail logs
+```aiignore
+tail -f app.log
+```
+
+## Kill server
+```aiignore
+fuser -k 3000/tcp
+```
