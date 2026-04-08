@@ -2,6 +2,8 @@ import Link from "next/link"
 import { TASKS, getTask } from "./tasks"
 import { getRecentLogs } from "./lib/googleTasks"
 
+export const dynamic = "force-dynamic"
+
 export default async function Home() {
   let recentLogs: Awaited<ReturnType<typeof getRecentLogs>> = []
   try {
